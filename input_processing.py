@@ -50,7 +50,6 @@ def process_input(user_games, mood, df):
         match = process.extractOne(g, game_list, score_cutoff=70)
 
         if match:
-            print(match)
             matched_games.append(match[0])
 
     extracted_tags = df[df["name"].isin(matched_games)]
