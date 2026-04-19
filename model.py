@@ -26,7 +26,7 @@ class Recommendor:
             else:
                 rating = 0
 
-            final_score = similarity_score * 10 + rating * 3 + popularity
+            final_score = similarity_score * 10 + rating * 5 + popularity
 
             if final_score > 0:
                 if row["name"] in user_games:

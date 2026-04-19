@@ -1,55 +1,57 @@
-# 🎮 Video Game Recommender System
+# 🎮 Find Your Next Obsession
 
-A content-based video game recommender system that suggests games based on recently played titles and the user's current mood. Built using Python, Pandas, and intelligent input processing techniques like fuzzy matching and tag-based ranking.
+A production-ready, ML-powered video game recommender system that suggests personalized games based on recently played titles and user mood — now deployed as a full-stack web application using FastAPI.
 
 ---
 
 ## 🚀 Features
 
-* 🔍 Fuzzy matching for real-world user inputs (e.g., "cod mw2")
-* 🧠 Mood-based recommendation using tag mapping
-* 🎯 Tag-weighted ranking system (strong / medium / weak features)
-* 📊 Popularity-based sorting using estimated owners
-* 🧹 Large dataset preprocessing (93K → optimized subset)
-* ⚡ Fast CLI-based recommendations
+- 🔍 Fuzzy matching for real-world inputs (e.g., "cod mw2")
+- 🧠 Mood-based recommendation using intelligent tag mapping
+- 🎯 Weighted scoring (strong / medium / weak tags)
+- 📊 Popularity-aware ranking using owners data
+- ⚡ TF-IDF + cosine similarity for improved relevance
+- 🌐 FastAPI-powered backend API
+- 🎨 Modern responsive UI (glassmorphism + grid layout)
+- ⏳ Loading animation for real-world deployment latency
 
 ---
 
 ## 🧠 How It Works
 
 1. User inputs:
+   - 3 recently played games  
+   - Current mood  
 
-   * 3 recently played games
-   * Current mood
+2. Input Processing:
+   - Fuzzy matches game names  
+   - Applies alias normalization  
+   - Extracts tags from matched games  
 
-2. System:
+3. Feature Engineering:
+   - Mood → mapped to dataset-relevant tags  
+   - Combined into a unified preference vector  
 
-   * Matches game names using fuzzy matching
-   * Extracts tags from matched games
-   * Converts mood → relevant tags
-   * Combines all tags into a user preference set
+4. Model:
+   - TF-IDF vectorization of game tags  
+   - Cosine similarity to measure relevance  
+   - Weighted scoring + popularity boost  
 
-3. Model:
-
-   * Compares user tags with each game’s tags
-   * Assigns weighted scores
-   * Sorts using:
-
-     * Tag match score
-     * Estimated owners (popularity)
-
-4. Output:
-
-   * Top 10 recommended games
-   * Name, Image URL, Description
+5. Output:
+   - Top recommendations  
+   - Game name, image, description  
 
 ---
 
 ## 🛠️ Tech Stack
 
-* Python
-* Pandas
-* RapidFuzz (for fuzzy matching)
+- Python  
+- Pandas  
+- Scikit-learn (TF-IDF, cosine similarity)  
+- RapidFuzz  
+- FastAPI  
+- Jinja2 (templating)  
+- HTML/CSS (custom UI)  
 
 ---
 
@@ -60,75 +62,91 @@ Video-Game-Recommendor/
 │
 ├── data/
 │   └── cleaned_steam_games.csv
-│
+├── templates/
+│   └── index.html
+├── static/
+│   └── style.css
 ├── preprocess.py
 ├── input_processing.py
 ├── model.py
 ├── main.py
+├── requirements.txt
 └── README.md
 ```
 
 ---
+## ⚙️ Pre-Deployment Setup
+
+### 1. FastAPI Integration
+
+Converted the CLI-based system into a FastAPI application to enable real-world usage and deployment.
+
+---
+
+### 2. Why Pydantic?
+
+Pydantic is used for:
+- Input validation  
+- Structured request handling  
+- Preventing malformed API requests  
+
+---
+
+### 3. Running with Uvicorn
+
+Uvicorn is the ASGI server used to run FastAPI apps.
+
+Used for:
+- Local testing  
+- Debugging endpoints  
+- Simulating production environment  
+
+```bash
+uvicorn app:app --reload
+```
 
 ## ⚠️ Challenges Faced (and Fixes)
 
-### 1. Large Dataset (230MB) not pushing to GitHub
+### 1. Fuzzy Matching Errors
+**Problem:** Inputs like "cod" matched irrelevant games
 
-**Problem:** GitHub rejected files >100MB
-
-**Fix:** Ignored raw dataset and only committed cleaned + reduced dataset
-
----
-
-### 2. Git still tracking deleted large files
-
-**Problem:** Old commits still contained large file
-
-**Fix:** Reset local commits and recreated repo to remove history
+**Fix:** Added score cutoff + alias mapping
 
 ---
 
-### 3. Fuzzy Matching returning wrong games
-
-**Problem:** Inputs like "cod" matched irrelevant entries
-
-**Fix:** Added `score_cutoff` and manual alias mapping
-
----
-
-### 4. Game name mismatch (COD MW2 ambiguity)
+### 2. Game Name Ambiguity
 
 **Problem:** Multiple versions of same game
 
-**Fix:** Introduced alias normalization before fuzzy matching
+**Fix:** Normalized aliases before matching
 
 ---
 
-### 5. Poor recommendations using only genres
+### 3. Weak Genre-Based Recommendations
 
-**Problem:** Genres too broad (e.g., "action")
+**Problem:** Genres too broad
 
-**Fix:** Switched to tag-based filtering for higher precision
-
----
-
-### 6. Random low-quality recommendations
-
-**Problem:** No ranking beyond tag match
-
-**Fix:** Added weighted scoring + popularity (owners)
+**Fix:** Switched to tag-based system
 
 ---
 
-### 7. Incorrect popularity sorting
+### 4. Poor Ranking Quality
 
-**Problem:** Owners stored as ranges ("50000 - 100000")
+**Problem:** No differentiation in results
 
-**Fix:** Extracted max value using custom parsing function
+**Fix:** Added weighted scoring + popularity
 
 ---
 
-### 8. Dataset encoding issues (weird characters)
+### 5. Owners Stored as Ranges
+
+**Problem:** Could not sort properly
+
+**Fix:** Extracted max value for ranking
+
+---
+
+### 6. Dataset Encoding Issues
 
 **Problem:** Corrupted names like "Sekiroâ€¦"
 
@@ -136,37 +154,37 @@ Video-Game-Recommendor/
 
 ---
 
-### 9. Dataset too large for deployment
+### 7. Mood Mapping Mismatch
 
-**Problem:** Cleaned dataset still >100MB
+**Problem:** Mood mapped to invalid tags
 
-**Fix:** Reduced dataset to top ~50K games based on relevance
-
----
-
-### 10. Mood mapping mismatch
-
-**Problem:** Mood mapped to genres not present in dataset
-
-**Fix:** Rebuilt mood map using actual dataset tags
+**Fix:** Rebuilt mapping using dataset tags
 
 ---
 
-### 11. Weak ranking quality
+### 8. Repetition in Recommendations
 
-**Problem:** All tags treated equally
+**Problem:** Input games appearing again
 
-**Fix:** Introduced strong / medium / weak tag weighting
+**Fix:** Explicit filtering
+
+---
+
+### 9. TF-IDF Integration Complexity
+
+**Problem:** Transition from rule-based → ML model
+
+**Fix:** Modularized vector pipeline
 
 ---
 
-### 12. Already played games being recommended
+### 10. FastAPI Template Errors
+**Problem:** TemplateResponse breaking due to version changes
 
-**Problem:** Repetition in output
-
-**Fix:** Filtered out user input games during recommendation
+**Fix:** Updated to new signature
 
 ---
+
 ## 🧭 Project Workflow (Step-by-Step)
 
 1. **Dataset Selection**
@@ -254,7 +272,35 @@ Video-Game-Recommendor/
     * Ensured realistic and consistent recommendations.
 
 16. **System Evolution**
-    * Initial rule-based recommendation system lacked scalability, robustness, and real-world deployment feasibility.
-    * To address this, the system was refactored using vectorized similarity techniques (TF-IDF + cosine similarity).
-    * Restructured into a modular API-driven architecture using FastAPI, enabling efficient inference, cleaner separation of concerns, and production-ready deployment.
+    * Started as CLI-based recommender
+    * Improved with tag-weighted scoring
+    * Upgraded using TF-IDF + cosine similarity
+    * Converted into FastAPI backend
+    * Integrated frontend UI
+    * Prepared for cloud deployment
 ---
+
+## 🚀 Deployment Notes
+- Compatible with Render / Azure
+- Uses Uvicorn as ASGI server
+- Handles cold-start environments
+- Fully API-driven architecture
+
+---
+
+## 💡 Key Takeaway
+This project demonstrates:
+
+```bash 
+Rule-based logic → Machine Learning → API → Full Web Application
+```
+
+---
+
+## 💡 Final Note
+This is a complete system combining:
+
+- Machine Learning
+- Backend Engineering
+- Frontend Development
+- Deployment Readiness
