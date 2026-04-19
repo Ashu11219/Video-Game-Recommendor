@@ -75,6 +75,7 @@ Video-Game-Recommendor/
 ### 1. Large Dataset (230MB) not pushing to GitHub
 
 **Problem:** GitHub rejected files >100MB
+
 **Fix:** Ignored raw dataset and only committed cleaned + reduced dataset
 
 ---
@@ -82,6 +83,7 @@ Video-Game-Recommendor/
 ### 2. Git still tracking deleted large files
 
 **Problem:** Old commits still contained large file
+
 **Fix:** Reset local commits and recreated repo to remove history
 
 ---
@@ -89,6 +91,7 @@ Video-Game-Recommendor/
 ### 3. Fuzzy Matching returning wrong games
 
 **Problem:** Inputs like "cod" matched irrelevant entries
+
 **Fix:** Added `score_cutoff` and manual alias mapping
 
 ---
@@ -96,6 +99,7 @@ Video-Game-Recommendor/
 ### 4. Game name mismatch (COD MW2 ambiguity)
 
 **Problem:** Multiple versions of same game
+
 **Fix:** Introduced alias normalization before fuzzy matching
 
 ---
@@ -103,6 +107,7 @@ Video-Game-Recommendor/
 ### 5. Poor recommendations using only genres
 
 **Problem:** Genres too broad (e.g., "action")
+
 **Fix:** Switched to tag-based filtering for higher precision
 
 ---
@@ -110,6 +115,7 @@ Video-Game-Recommendor/
 ### 6. Random low-quality recommendations
 
 **Problem:** No ranking beyond tag match
+
 **Fix:** Added weighted scoring + popularity (owners)
 
 ---
@@ -117,6 +123,7 @@ Video-Game-Recommendor/
 ### 7. Incorrect popularity sorting
 
 **Problem:** Owners stored as ranges ("50000 - 100000")
+
 **Fix:** Extracted max value using custom parsing function
 
 ---
@@ -124,6 +131,7 @@ Video-Game-Recommendor/
 ### 8. Dataset encoding issues (weird characters)
 
 **Problem:** Corrupted names like "Sekiroâ€¦"
+
 **Fix:** Loaded CSV with proper encoding (`utf-8`)
 
 ---
@@ -131,6 +139,7 @@ Video-Game-Recommendor/
 ### 9. Dataset too large for deployment
 
 **Problem:** Cleaned dataset still >100MB
+
 **Fix:** Reduced dataset to top ~50K games based on relevance
 
 ---
@@ -138,6 +147,7 @@ Video-Game-Recommendor/
 ### 10. Mood mapping mismatch
 
 **Problem:** Mood mapped to genres not present in dataset
+
 **Fix:** Rebuilt mood map using actual dataset tags
 
 ---
@@ -145,6 +155,7 @@ Video-Game-Recommendor/
 ### 11. Weak ranking quality
 
 **Problem:** All tags treated equally
+
 **Fix:** Introduced strong / medium / weak tag weighting
 
 ---
@@ -152,6 +163,7 @@ Video-Game-Recommendor/
 ### 12. Already played games being recommended
 
 **Problem:** Repetition in output
+
 **Fix:** Filtered out user input games during recommendation
 
 ---
