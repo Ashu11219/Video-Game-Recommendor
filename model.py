@@ -36,11 +36,12 @@ class Recommendor:
                     continue
 
                 recommendations.append({
-                    "name": row["name"],
+                    "name": row["name"].title(),
                     "score": final_score,
                     "owners": row["owners"],
                     "image": row["image"],
-                    "about": row["about"]
+                    "about_short": str(row["about"])[:150],
+                    "about_full": str(row["about"])
                 })
 
         recommendations = sorted(recommendations,

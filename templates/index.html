@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>What Should I play next?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel = "stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+<h1 class="title">
+    <span class="icon">
+        <svg viewBox="0 0 24 24">
+            <path d="M7 10h2v2H7v2H5v-2H3v-2h2V8h2v2zm10-1a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm-3 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm6-3c0-2.21-1.79-4-4-4H8C5.79 5 4 6.79 4 9v6c0 1.66 1.34 3 3 3h1l2-3h4l2 3h1c1.66 0 3-1.34 3-3V9z"/>
+        </svg>
+    </span> Find Your Next Obsession
+</h1>
+
+
+<form method="post" action="/recommend-ui">
+    <input type="text" name="game1" placeholder="Enter recently played game 1" required>
+    <input type="text" name="game2" placeholder="Enter recently played game 2" required>
+    <input type="text" name="game3" placeholder="Enter recently played game 3" required>
+    <input type="text" name="mood" placeholder="Mood" required>
+
+    <button type="submit">Recommend</button>
+</form>
+
+<div id="loader" class="loader hidden"></div>
+<div class="grid">
+    {% if results %}
+        {% for game in results %}
+            <div class="card">
+                <h3>{{ game.name }}</h3>
+                <img src="{{ game.image }}" width="200">
+
+                <p>
+                    {{ game.about_short }}...
+                    <span class="more">{{ game.about_full }}</span>
+                    <button onclick="toggleMore(this)">Read more</button>
+                </p>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<script>
+function toggleMore(button) {
+    const moreText = button.previousElementSibling;
+
+    if (moreText.style.display === "inline") {
+        moreText.style.display = "none";
+        button.innerText = "Read more";
+    } else {
+        moreText.style.display = "inline";
+        button.innerText = "Show less";
+    }
+}
+</script>
+
+<script>
+    const form = document.querySelector("form");
+    const loader = document.getElementById("loader");
+    const grid = document.querySelector(".grid");
+
+    form.addEventListener("submit", () => {
+        loader.classList.remove("hidden");
+        if (grid) grid.style.display = "none";
+    });
+</script>
+</div>
+</body>
+</html>
