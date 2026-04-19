@@ -20,6 +20,7 @@ df["about"] = df["about"].fillna("No description available. Please search on Ste
 df = df.drop_duplicates(subset = ["name"])
 df = df.reset_index(drop = True)
 df["tags_set"] = df["tags"].apply(set)
+df["feature_text"] = df["tags"].apply(lambda x: " ".join(x))
 
 df = df.sort_values(by = "owners", ascending = False).head(50000)
 

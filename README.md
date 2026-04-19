@@ -238,7 +238,11 @@ Video-Game-Recommendor/
 
 15. **Final Optimization**
 
-* Balanced relevance vs popularity.
-* Ensured realistic and consistent recommendations.
+    * Balanced relevance vs popularity.
+    * Ensured realistic and consistent recommendations.
 
+16. **System Evolution**
+    * Initial rule-based recommendation system lacked scalability, robustness, and real-world deployment feasibility.
+    * To address this, the system was refactored using vectorized similarity techniques (TF-IDF + cosine similarity).
+    * Restructured into a modular API-driven architecture using FastAPI, enabling efficient inference, cleaner separation of concerns, and production-ready deployment.
 ---

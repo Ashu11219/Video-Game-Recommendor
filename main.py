@@ -1,6 +1,6 @@
 import pandas as pd
 from input_processing import process_input
-from model import recommendor
+from model import Recommendor
 
 df = pd.read_csv("data/cleaned_steam_games.csv")
 
@@ -13,9 +13,10 @@ user_games = [
 ]
 
 mood = input("Enter your mood: ")
-user_tags = process_input(user_games, mood, df)
+user_tags, matched_games = process_input(user_games, mood, df)
 
-results = recommendor(user_tags, user_games, df)
+model = Recommendor(df)
+results = model.recommend(user_tags, matched_games)
 
 print("Recommended Games")
 print()

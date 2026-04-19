@@ -1,54 +1,50 @@
-def recommendor(user_genres, user_games, df):
-    recommendations = []
+from sklearn.feature_extraction.text import TfidfVectorizer as vec
+from sklearn.metrics.pairwise import cosine_similarity as cs
+import math
 
-    for _, row in df.iterrows():
-        game_tags = row["tags_set"]
+class Recommendor:
+    def __init__(self, df):
+        self.vectorizer = vec(max_features= 5000)
+        feature_text = df["tags_set"].apply(lambda x: " ".join(x))
+        self.game_vectors = self.vectorizer.fit_transform(feature_text)
+        self.df = df
 
-        strong_tags = {
-            "fps", "shooter", "action",
-            "multiplayer", "pvp", "co-op",
-            "open world", "story rich",
-            "rpg", "survival"
-        }
-        medium_tags = {
-            "adventure", "strategy", "tactical",
-            "simulation", "sandbox", "exploration",
-            "management", "crafting",
-            "team-based", "real-time strategy",
-            "turn-based"
-        }
-        score = 0
-        for g in user_genres:
-            if g in game_tags:
-                if g in strong_tags:
-                    score += 3
-                elif g in medium_tags:
-                    score += 2
-                else:
-                    score += 1
+    def recommend(self, user_tags, user_games):
+        user_text = " ".join(user_tags)
+        user_vector = self.vectorizer.transform([user_text])
 
-        popularity = row["owners"]
-        reviews = row["positive"] + row["negative"]
-        if reviews > 0:
-            rating = row["positive"] / reviews
-        else:
-            rating = 0
+        similarities = cs(user_vector, self.game_vectors).flatten()
+        recommendations = []
 
-        final_score = score * 5 + rating * 3 + (popularity / 1000000)
+        for idx, row in self.df.iterrows():
+            similarity_score = similarities[idx]
 
-        if final_score > 0:
-            if row["name"] in user_games:
-                continue
-            recommendations.append({
-                "name": row["name"],
-                "score": final_score,
-                "owners": row["owners"],
-                "image": row["image"],
-                "about": row["about"]
-            })
+            popularity = math.log1p(row["owners"])
+            reviews = row["positive"] + row["negative"]
+            if reviews > 0:
+                rating = row["positive"] / reviews
+            else:
+                rating = 0
 
-    recommendations = sorted(recommendations,
-                             key = lambda x: (x["score"]),
-                             reverse = True)
+            final_score = similarity_score * 10 + rating * 3 + popularity
 
-    return recommendations[:10]
+            if final_score > 0:
+                if row["name"] in user_games:
+                    continue
+
+                if similarity_score < 0.1:
+                    continue
+
+                recommendations.append({
+                    "name": row["name"],
+                    "score": final_score,
+                    "owners": row["owners"],
+                    "image": row["image"],
+                    "about": row["about"]
+                })
+
+        recommendations = sorted(recommendations,
+                                 key = lambda x: (x["score"]),
+                                 reverse = True)
+
+        return recommendations[:10]

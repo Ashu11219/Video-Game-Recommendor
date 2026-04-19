@@ -81,4 +81,4 @@ def process_input(user_games, mood, df):
     if matched_mood in mood_map:
         tags.update(mood_map[matched_mood])
 
-    return tags
+    return tags, matched_games
