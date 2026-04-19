@@ -3,7 +3,16 @@
 A production-ready, ML-powered video game recommender system that suggests personalized games based on recently played titles and user mood — now deployed as a full-stack web application using FastAPI.
 
 ---
+## 🌐 Live Demo
 
+👉 **Try it here:**  
+https://find-your-next-obsession.onrender.com
+
+--- 
+## 📸 Demo
+
+![App Demo](assets/demo.png)
+---
 ## 🚀 Features
 
 - 🔍 Fuzzy matching for real-world inputs (e.g., "cod mw2")
